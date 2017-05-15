@@ -1,0 +1,23 @@
+项目说明
+
+zsk爬虫爬取http://lib.csdn.net CSDN知识库所有技术大类存入数据库
+
+运行爬虫：
+F:\HW\scrapyzsk\csdnzsk>scrapy crawl zsk
+
+
+
+1.爬取数据保存到mysql中 2017-5-10
+爬取URL规则需要再考虑，错误信息：
+2017-05-09 17:18:55 [scrapy] DEBUG: Ignoring response <500 http://lib.csdn.net/base/reactnative/+%20s%20+>: HTTP status code is not handled or not allowed
+
+
+2.保存到Mongodb中   2017-5-11
+安装 mongodb python driver
+>easy_install pymongo
+
+
+3.csdnzsk文件夹里是爬虫
+  web文件夹里是展示数据的网站，采用python tornado框架
+  tornado在线文档：http://www.tornadoweb.org/en/stable/
+  评星功能
