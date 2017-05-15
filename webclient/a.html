@@ -11,6 +11,7 @@
         <script type="text/javascript" src="raty/lib/jquery.raty.css"></script>
     </head>
     <body>
+        <a href="chat.html">查看图表</a>
         <table id="dg" title="技术分布情况"
 			data-options="singleSelect:true,collapsible:true,fitColumns:true">
 		<thead>
@@ -40,8 +41,8 @@
 		}
 
         $('#dg').datagrid({
-            //url:'http://localhost:8000/zsk',
-            url:'http://happydaily.imwork.net:35190/zsk',
+            url:'http://localhost:8000/zsk',
+            //url:'http://happydaily.imwork.net:35190/zsk',//花生壳地址
             method:'get',
             onClickRow:function(rowIndex, rowData){
                 console.log(rowData);
@@ -71,7 +72,7 @@
                     //选择星星，存入数据库
                     click: function(score, evt) {
                         var id = $(this).parent("tr").find("td").eq(0).text();
-                        $.post('http://happydaily.imwork.net:35190/zsk',{'_id':id,'score':score},function(data){
+                        $.post('http://localhost:8000/zsk',{'_id':id,'score':score},function(data){
                             //alert(data);
                         });
                     }

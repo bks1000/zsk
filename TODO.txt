@@ -21,3 +21,4 @@ F:\HW\scrapyzsk\csdnzsk>scrapy crawl zsk
   web文件夹里是展示数据的网站，采用python tornado框架
   tornado在线文档：http://www.tornadoweb.org/en/stable/
   评星功能
+  echart http://echarts.baidu.com/tutorial.html

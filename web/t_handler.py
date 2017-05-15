@@ -46,9 +46,13 @@ class ZskHandler(BaseHandler):
 
     def get(self):
         #self.write(jsonb.dumps(db.find("zsk", {})))
-
-        zsk = self.db.find("zsk", {}).sort("stars",pymongo.DESCENDING) #返回的是一个游标(pymongo.cursor.cursor)，意味着循环遍历一次以后，游标指向末尾
-        print zsk.count()
+        sort = self.get_argument('sort')
+        zsk = None
+        if sort=='':
+            zsk = self.db.find("zsk", {}).sort("stars",pymongo.DESCENDING) #返回的是一个游标(pymongo.cursor.cursor)，意味着循环遍历一次以后，游标指向末尾
+        else:
+            zsk = self.db.find("zsk", {}) #返回的是一个游标(pymongo.cursor.cursor)，意味着循环遍历一次以后，游标指向末尾
+        #print zsk.count()
         zsk = list(zsk)         #将查询结果转list类型
         #循环将_id 从ObjectId类型转为string类型
         for k in zsk:
