@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+       
+    </head>
+    <body>
+        <input type="hidden" name="coll" id="coll" value="{{coll}}"/>
+        <table id="dg" class="easyui-datagrid" style="width:700px;height:250px"
+			data-options="singleSelect:true,fit:true,fitColumns:true,collapsible:false,url:'/{{coll}}/list?id=all',method:'get',toolbar:tb">
+            <thead>
+                <tr>
+                    <th data-options="field:'id',width:40,align:'center'">ID</th>
+                    <th data-options="field:'title',width:100,align:'center'">文章标题</th>
+                    <th data-options="field:'stars',width:40,align:'center'">星级</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="tb">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="openWin()">新增</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="updateWin()">修改</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="del()">删除</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="detail()">查看文章</a>
+        </div>
+        <div id="dd">  
+        </div> 
+
+        <script type="text/javascript">
+             $(document).ready(function(){
+                $('#dg').datagrid({
+                    onLoadSuccess:function(data){
+                        //数据加载成功，初始化评星插件
+                        $('table[class="datagrid-btable"]  td[field="stars"]').raty({
+                            readOnly: true,
+                            //设置星星个数
+                            number:function(){
+                                return 10;
+                            },
+                            path: function() {
+                                return "{{ static_url("") }}";
+                            },
+                            //为星星设置查询结果个数
+                            score: function() {
+                                s = $(this).find('div').eq(0)
+                                if(s){
+                                    s.css("display","none");
+                                    return s.text();
+                                }
+                            }
+                        });
+                    }
+                });
+             });
+             function reload(){
+                 $('#dg').datagrid('reload'); 
+             }
+             function openWin(){
+                $('#dd').dialog({    
+                    title: '新增',    
+                    width: 800,    
+                    height: 600,    
+                    closed: false,    
+                    cache: false,    
+                    href: '/{{coll}}/list?act=add',    
+                    modal: true,
+                    onClose:function(){
+                        $('#dg').datagrid('reload'); 
+                    }
+                });
+            }
+            function getSelectRow(){
+                var row = $('#dg').datagrid('getSelected');
+                if(row ==null){
+                    $.messager.alert('提示','请选择一条记录');  
+                }
+                return row;
+            }
+            function updateWin(){
+                var row = getSelectRow();
+                if(row != null){
+                    $('#dd').dialog({    
+                        title: '修改',    
+                        width: 800,    
+                        height: 600,    
+                        closed: false,    
+                        cache: false,    
+                        href: '/{{coll}}/list?act=edit&id='+row.id,    
+                        modal: true,
+                        onClose:function(){
+                            $('#dg').datagrid('reload'); 
+                        }
+                    });
+                    $('#dd').dialog('open').dialog('refresh', href);//调用refresh刷新缓存，或者在href中添加变量。
+                }
+            }
+            function detail(){
+                var row = getSelectRow();
+                if(row !=null){
+                    parent.OP.addPanel('/{{coll}}/details/'+row.id,row.title)
+                } 
+            }
+            function del(){
+                var row = getSelectRow();
+                if(row !=null){
+                    $.messager.confirm('确认','您确认想要删除记录吗？',function(r){    
+                        if (r){    
+                            $.get('/{{coll}}/list?act=del&id='+row.id,function(data){
+                                $('#dg').datagrid('reload');
+                            });
+                        }    
+                    });  
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -41,12 +41,14 @@ class DbMongoClient(object):
     def find_one(self, coll, condition):
         """
             根据条件获取单条数据
+            返回值是字典类型
         """
         return self.__getdb()[coll].find_one(condition)
 
     def find(self, coll, condition, cols=None):
         """
             根据条件查询数据
+            返回值是列表字典，需要 list(返回结果)，处理后使用
             condition 查询条件，如果没有请输入 {}
             cols      查询结果列，如果没有输入 {}
             cols 说明：包含：1，排除：0。注意，不能同时出现包含和排除。
@@ -234,8 +236,8 @@ if __name__ == "__main__":
     #print client.find_one_and_update('user', {'username':'白开水'}, user)
     
     #以数组形式打印结果
-    from bson import json_util as jsonb
-    zsk = client.find("zsk", {})    #直接输出是：<pymongo.cursor.Cursor object at 0x0000000003E25C88>
-    print jsonb.dumps(zsk)
+    #from bson import json_util as jsonb
+    #zsk = client.find("zsk", {})    #直接输出是：<pymongo.cursor.Cursor object at 0x0000000003E25C88>
+    #print jsonb.dumps(zsk)
 
 

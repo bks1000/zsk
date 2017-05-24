@@ -1,4 +1,5 @@
 项目说明
+git 地址 ： https://github.com/bks1000/zsk.git
 
 zsk爬虫爬取http://lib.csdn.net CSDN知识库所有技术大类存入数据库
 

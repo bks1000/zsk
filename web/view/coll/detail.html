@@ -1,0 +1,43 @@
+{% autoescape None %}
+
+<html>
+    <head>
+        <title>{{title}}</title>
+    </head>
+    <body>
+        <style type="text/css">
+            .title{
+                text-align: center;
+                font-size: 16px;
+            }
+            p{
+                font-size: 14px;
+                line-height: 36px;
+                text-indent: 35px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            .exp{
+                margin-top: 40px;
+                margin-left: 40px;
+                width: 100px;
+                height: 36px;
+            }
+        </style>
+        <input id="exp" name="exp" class="exp" type="button" value="打印" onclick="OP.CmdSave('{{coll}}','{{id}}','{{title}}')"/>
+        <div id="divArtical">
+            <p class="title">{{title}}</p>
+            {{content}}
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+

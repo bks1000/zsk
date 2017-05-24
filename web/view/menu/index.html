@@ -1,0 +1,105 @@
+{% extends "childrenMaster.html"%}
+{% block body %}
+
+<!--改造成树形grid-->
+<table id="dg">
+</table>
+<div id="tb">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="reload()">查询</a>
+	<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="openWin()">新增</a>
+	<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="updateWin()">修改</a>
+	<a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="del()">删除</a>
+</div>
+<div id="dd">  
+</div> 
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#dg').treegrid({
+            fit:true,
+            fitColumns:true,
+            url:'/menuop?data=1',
+            method:'get',
+            toolbar:'#tb',
+            idField:'_id',
+            singleSelect:true,
+            rownumbers:true,
+            columns:[[    
+                {field:'_id',title:'ID',width:100},    
+                {field:'text',title:'菜单名',width:100},    
+                {field:'attributes',title:'URL',width:100,align:'center',
+                formatter: function (value, row, index) {
+                        //easyui datagrid 绑定json对象属性的属性
+                        return row.attributes.url;
+                    }
+                }    
+            ]],
+        });  
+        /*$('#btnadd').bind('click', function(){    
+            openWin();    
+        });*/
+    });
+    //打开隐藏的win窗口    
+    function openWin(){
+        $('#dd').dialog({    
+            title: '新增',    
+            width: 400,    
+            height: 300,    
+            closed: false,    
+            cache: false,    
+            href: '/menuop?act=add',    
+            modal: true,
+            onClose:function(){
+               $('#dg').treegrid('reload'); 
+            }
+        });
+    }
+    function reload(){
+        $('#dg').treegrid('reload');
+    }
+
+    function getSelectRow(){
+        var row = $('#dg').datagrid('getSelected');
+        if(row ==null){
+            $.messager.alert('提示','请选择一条记录');  
+        }
+        return row;
+    }
+    function updateWin(){
+        var row = getSelectRow();
+        if(row==null){
+            return;
+        }
+        var _id = row._id;
+        $('#dd').dialog({    
+            title: '修改',    
+            width: 400,    
+            height: 300,    
+            closed: false,    
+            cache: false,    
+            href: '/menuop?act=update&_id='+_id+"&pid="+row.pid,    
+            modal: true,
+            onClose:function(){
+               $('#dg').treegrid('reload'); 
+            }
+        });
+    } 
+    function del(){
+        var row = getSelectRow();
+        if(row==null){
+            return;
+        }
+        var _id = row._id;
+        var pid = row.pid;
+        $.messager.confirm('确认','您确认想要删除记录吗？',function(r){    
+            if (r){    
+                $.post('/menuop?act=del&_id='+_id+'&pid='+pid,function(data){
+                    $('#dg').treegrid('reload');
+                });
+            }    
+        });  
+    }  
+</script>
+
+{% end %}

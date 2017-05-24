@@ -1,0 +1,109 @@
+{% extends "master.html" %}
+
+{% block header %}
+
+<style>
+	.row{
+		margin-top: 20px;
+		height: 40px;
+		text-align:center;
+		padding:5px;
+	}
+</style>
+	
+{% end %}
+
+{% block body %}
+
+	<div class="easyui-tabs" style="width:700px;height:350px;margin-top:150px;margin-left:350px;">
+		<div title="登录" style="padding:10px">
+			<form id="flogin" action='/index' method="post">   
+				<div class="row">   
+					<label for="name">登录名:</label>   
+					<input class="easyui-textbox" type="text" name="username" data-options="required:true,prompt:'请输入用户名或者邮箱'" style="width:220px; height:30px;" />   
+				</div>   
+				<div class="row">   
+					<label for="email">密码&nbsp;&nbsp;&nbsp;&nbsp;:</label>   
+					<input class="easyui-textbox" type="password" name="pwd" data-options="required:true" style="width:220px; height:30px;" />   
+				</div>
+				<div class="row">   
+					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">登录</a>
+					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">清空</a>
+				</div>    
+			</form>
+		</div>
+		<div title="注册" style="padding:10px">
+			<form id="freg" method="post">   
+				<div class="row">   
+					<label for="name">登录名:</label>   
+					<input class="easyui-textbox" type="text" name="username" data-options="required:true,prompt:'请输入用户名或者邮箱'" style="width:220px; height:30px;" />   
+				</div>   
+				<div class="row">   
+					<label for="email">密码&nbsp;&nbsp;&nbsp;&nbsp;:</label>   
+					<input class="easyui-textbox" type="password" name="pwd" data-options="required:true" style="width:220px; height:30px;" />   
+				</div>
+				<div class="row">   
+					<label for="email">确认密码:</label>   
+					<input class="easyui-textbox" type="password" name="repwd" data-options="required:true" style="width:220px; height:30px;" validType="equalTo['#pwd']" invalidMessage="两次输入密码不匹配" />   
+				</div>
+				<div class="row">   
+					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitregForm()">注册</a>
+					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearregForm()">清空</a>
+				</div>    
+			</form>
+		</div>
+		<div title="关于" data-options="iconCls:'icon-help',closable:true" style="padding:10px">
+			技术栈包括：<br/>
+			TORNADO服务端框架<br/>
+			MONGODB数据库<br/>
+			EASYUI前端框架<br/>
+			ECHART图表<br/>
+			CKEDITOR富文本编辑器<br/>
+		</div>
+	</div>
+{% end %}
+{% block footer%}
+	<script type="text/javascript">
+		function submitForm(){
+			//ajax方式，跳转页面
+			/*$('#flogin').form({    
+    			url:'/login',    
+				onSubmit: function(){    
+					return $(this).form('enableValidation').form('validate');
+				},    
+				success:function(data){    
+					alert(data)    
+				}    
+			});    
+			// submit the form    
+			$('#flogin').submit(); 	
+			*/
+			$('#flogin').submit();
+		}
+		function clearForm(){
+			$('#flogin').form('clear');
+		}
+		//注册
+		function submitregForm(){
+			$('#freg').form({    
+    			url:'/reg',    
+				onSubmit: function(){    
+					return $(this).form('enableValidation').form('validate');
+				},    
+				success:function(data){
+					data = eval('('+ data +')');
+					if(data.code<1){
+						alert(data.msg);
+						$('#freg').form('clear');
+					}
+				}    
+			});    
+			// submit the form    
+			$('#freg').submit(); 	
+			
+		}
+		function clearregForm(){
+			$('#freg').form('clear');
+		}
+	</script>
+{% end %}

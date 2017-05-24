@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        
+        <!--<meta charset="utf-8">
+        <title>ECharts</title>
+        <script type="text/javascript" src="{{ static_url("js/easyui/jquery.min.js")}}"></script>
+        <script src="{{ static_url("js/echart/echarts.js")}}"></script>
+        <script src="{{ static_url("js/echart/theme/roma.js")}}"></script>-->
+
+        
+    </head>
+    <body>
+        <!-- 说明Easyui窗口加载页面，只加载<body>中的内容 -->
+        <!--<script type="text/javascript" src="{{ static_url("js/easyui/jquery.min.js")}}"></script>--><!--主界面有了，不要重复加载-->
+        <script src="{{ static_url("js/echart/echarts.js")}}"></script>
+        <!-- 引入 vintage 主题 -->
+        <script src="{{ static_url("js/echart/theme/roma.js")}}"></script>
+        <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+        <div id="main" style="width: auto;height:700px;"></div>
+
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById('main'),'roma');
+            // 显示标题，图例和空的坐标轴
+            myChart.setOption({
+                title: {
+                    text: '知识库'
+                },
+                tooltip: {},
+                legend: {
+                    data:['星级']
+                },
+                xAxis: {
+                    axisLabel:{interval: 0,rotate:45, margin:2},
+                    type:'category',
+                    data: []
+                },
+                yAxis: {},
+                grid: { // 控制图的大小，调整下面这些值就可以，
+                        x:  40,
+                        y:  40,
+                        x2: 40,
+                        y2: 100// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
+                },
+                series: [{
+                    name: '星级',
+                    type: 'bar',
+                    barCategoryGap:'10',
+                    data: []
+                }]
+            });
+
+            myChart.showLoading();
+            // 异步加载数据
+            $.get('/zsk?sort=0').done(function (data) {
+                data = eval('('+data+')');
+                var names = [];
+                var stars = [];
+                for(var d=0;d<data.length;d++){
+                    names.push(data[d].name);
+                    stars.push(data[d].stars);
+                }
+                myChart.hideLoading();
+                // 填入数据
+                myChart.setOption({
+                    xAxis: {
+                        data: names
+                    },
+                    series: [{
+                        // 根据名字对应到相应的系列
+                        name: '星级',
+                        data: stars
+                    }]
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,104 @@
+{% extends "master.html" %}
+
+{% block header %}
+	
+{% end %}
+
+{% block body %}
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north'" style="height:50px">
+        tornado
+    </div>
+    <div data-options="region:'south',split:false" style="height:20px;">
+        以知识库为基础，完善它
+    </div>
+    <div data-options="region:'west',split:true" title="目录" style="width:260px;">
+        <ul id="menutree"></ul>
+    </div>
+    <div data-options="region:'center',border:false" id="tt" class="easyui-tabs">
+        
+    </div>
+</div>
+{% end %}
+
+{% block footer%}
+<script type="text/javascript">
+
+    jQuery(document).ready(function($) {
+        //添加主界面
+        OP.addPanel('/chart',"主页");
+        //树形菜单点击动作，打开新标签，加载
+        $('#menutree').tree({
+            url:'/menu',
+            method:'get',
+            animate:true,
+            onClick: function(node){
+                var url = node.attributes.url;
+                var text = node.text;
+                if (text != '菜单管理'){
+                    url = url+"/list";
+                }
+                OP.addPanel(url,text);
+            }
+        });
+    });
+    //操作类
+    var OP = {
+        addPanel:function(url,name){
+            //判断是否存在同名tab，存在选中，不存在新增
+            var tab = $('#tt').tabs('exists',name);
+            if(!tab){
+                $('#tt').tabs('add',{    
+                    title:name,
+                    href:url,    
+                    closable:true,
+                    selected:true 
+                });
+            }else{
+                var tab = $('#tt').tabs('select',name);
+            }
+        },
+        getPanel:function(name){
+            return $('#tt').tabs('getTab',name);
+        },
+       
+        exp:function(name){
+            //goolge不支持SaveAs命令
+            var div = OP.getPanel(name);
+            var headstr = "<html><head><title></title></head><body>";
+            var footstr = "</body>";
+            if (div!=null){
+                var str = div[0].innerHTML;
+                var artical = headstr+str+footstr;
+                document.execCommand('SaveAs',true,artical);
+                return false;
+            }
+        },
+
+        CmdSave: function (coll,id,name) {
+            var css = "<style type='text/css'>.trNormalTd { border-top-width: 0px; border-bottom-width: 0px;text-align:right;}.trLastTd {border-top-width: 0px;text-align:right;}.trFirstTd{border-bottom-width: 0px;text-align: right;}</style>";
+            //var div = OP.getPanel(name);
+            var div = document.getElementById('divArtical');
+            var headstr = "<html><head><title></title></head><body>";
+            var footstr = "</body></html>";
+            if (div!=null){
+                //var str = div[0].innerHTML;
+                var str = div.innerHTML;
+                var content = css + str;
+                //console.log(content);
+                //var name = name + ".htm";
+                //将文档中“/file?filename=”替换为完整URL地址如:http://localhost:8000/file?filename=雏田.png
+                var protocol = window.location.protocol +'//';
+                var host = window.location.host;
+                content = content.replace(/\/file\?filename/g , protocol+host+"/file?filename");
+                console.log(content);
+                var newWindow = window.open('/'+coll+'/details/'+id, 'blank', "width=800,height=600 ",true);
+                //newWindow.document.body.innerHTML = headstr + content + footstr; 
+                //newWindow.document.write(headstr + content + footstr);
+                newWindow.print();
+            }
+        }
+    };
+        
+</script>
+{% end %}

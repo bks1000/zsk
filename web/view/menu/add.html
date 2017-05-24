@@ -1,0 +1,78 @@
+{% extends "childrenMaster.html"%}
+{% block body %}
+
+<form id="ff" method="post">   
+    <div class="row">   
+        <label for="name">菜单名:</label>   
+        <input class="easyui-textbox" id="name" name="name" data-options="required:true" />   
+    </div>   
+    <div class="row">
+        <label for="parentid">上级菜单:</label>   
+        <input id="parentid">
+        <input type="hidden" id="pid" name="pid" value="{{pid}}"/> 
+    </div>
+    <div class="row">   
+        <label for="url">URL:</label>   
+        <input class="easyui-textbox" id="url" name="url" data-options="required:true" />   
+    </div> 
+    <div class="row">
+        <input id="_id" name="_id" value="{{ _id }}" type="hidden"/>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">清空</a>
+    </div>  
+</form> 
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#parentid').combotree({    
+            url: '/menu?moc=1',
+            method:'get',   
+            required: true,
+            onClick: function(node){
+                console.log(node.attributes.url);
+                //var url = node.attributes.url;
+                var text = node.text;
+                var _id = node._id;
+                $('#pid').val(_id);
+                $("#url").textbox("setValue",node.attributes.url);
+            }
+        });
+        var _id = $('#_id').val();  
+        if(_id!=''){
+            //$('#ff').form('load','/menuop?act=find&_id='+_id);
+            $.get('/menuop?act=find&_id='+_id,function(data){
+                data = eval('('+data+')');
+                //手动绑定
+                $("#name").textbox("setValue", data.text);
+                $("#url").textbox("setValue", data.attributes.url);
+                $('#parentid').combotree('setValue',data.pid);
+            });
+        }
+    });
+    //保存
+    function submitForm(){
+        $('#ff').form({    
+            url:'/menuop?act=save',    
+            onSubmit: function(){    
+                return $(this).form('enableValidation').form('validate');
+            },    
+            success:function(data){
+                data = eval('('+ data +')');
+                if(data.code<1){
+                    alert(data.msg);
+                    $('#ff').form('clear');
+                }else{
+                    $.messager.alert('提示','保存成功');
+                    parent.$('#dd').dialog('close');
+                }
+            }    
+        });    
+        // submit the form    
+        $('#ff').submit(); 	
+        
+    }
+    function clearForm(){
+        $('#ff').form('clear');
+    }
+</script>
+{% end %}

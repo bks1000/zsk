@@ -1,0 +1,84 @@
+
+<!--<script type="text/javascript" src="{{ static_url("js/easyui/jquery.min.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("js/bootstrap/css/bootstrap.min.css") }}"></script>
+<script type="text/javascript" src="{{ static_url("js/bootstrap/js/bootstrap.min.js") }}"></script>-->
+<script type="text/javascript" src="{{ static_url("js/ckeditor/ckeditor.js") }}"></script>
+<form>
+    <input id="coll" name="coll" value="{{coll}}" type="hidden"/>
+    <input id="_id" name="_id" value="{{_id}}" type="hidden"/>
+    <div>
+        <a id="btnsave" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>  
+    </div>
+    <div class="row">
+        <label class="control-label" for="title">文章标题</label>
+        <input class="easyui-textbox" id="title" name="title" style="width:300px"  value="{{title}}" placeholder="标题">
+    </div>
+    <div class="row">
+        <label class="control-label">星级</label>
+        <div id="divstars" name="divstars" data-path="{{ static_url("")}}"></div>
+        <input id="stars" name="stars" value="{{stars}}" type="hidden"/>
+    </div>
+    <div class="row">
+        <textarea name="editor1" id="editor1" rows="10" cols="80">
+                This is my textarea to be replaced with CKEditor.
+        </textarea>
+    </div>
+
+</form>
+<script type="text/javascript"> 
+    $(document).ready(function(){
+        $('#divstars').raty({
+            //设置星星个数
+            number:function(){
+                return 10;
+            },
+            //为星星设置查询结果个数
+            score: function() {
+                return $("#stars").val();
+            },
+            path: function() {
+                return this.getAttribute('data-path');
+            },
+            click: function(score, evt) {
+                $("#stars").val(score);
+            }
+        });
+
+        //编辑器
+        CKEDITOR.replace('editor1',{
+             customConfig: '{{ static_url("js/ckeditor/myconfig.js") }}'
+         } );
+
+        $('#btnsave').bind('click', function(){    
+            save();   
+        });  
+
+        //修改，填充数据
+        if('{{_id}}'!=''){
+            //查询数据并填充
+            $.get('/{{coll}}/list',{'id':'{{_id}}'},function(data){
+                console.log(data);
+                data = eval('('+ data +')');
+                console.log(data);
+                $("#title").textbox('setValue',data.title);
+                $("#stars").val(data.stars);
+                $('#divstars').raty('score', data.stars);
+                CKEDITOR.instances.editor1.setData(data.content);
+            });
+        }
+    });
+    
+    function save(){
+        var data = CKEDITOR.instances.editor1.getData();
+        var param = {};
+        param.coll = $("#coll").val();
+        param.title = $("#title").textbox('getValue');
+        param.stars = $('#stars').val();
+        param._id = $("#_id").val();
+        param.content = data;
+        $.post('/{{coll}}/list',param,function(data){
+            $.messager.alert('提示',data);
+            parent.$('#dd').dialog('close');
+        });
+    }
+</script>

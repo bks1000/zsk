@@ -1,0 +1,29 @@
+{% autoescape None %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ page_title }}</title>
+	<link rel="stylesheet" type="text/css" href="{{ static_url("js/easyui/themes/default/easyui.css") }}">
+	<link rel="stylesheet" type="text/css" href="{{ static_url("js/easyui/themes/icon.css") }}">
+	<script type="text/javascript" src="{{ static_url("js/easyui/jquery.min.js") }}"></script>
+	<script type="text/javascript" src="{{ static_url("js/easyui/jquery.easyui.min.js") }}"></script>
+	<script type="text/javascript" src="{{ static_url("js/raty/lib/jquery.raty.js") }}"></script>
+	<script type="text/javascript" src="{{ static_url("js/raty/lib/jquery.raty.css") }}"></script>
+	<!--<script type="text/javascript" src="{{ static_url("js/bootstrap/css/bootstrap.min.css") }}"></script>
+	<script type="text/javascript" src="{{ static_url("js/bootstrap/js/bootstrap.min.js") }}"></script>-->
+	<style type="text/css">
+		.row{
+			margin-top: 10px;
+			height: 30px;
+			text-align:center;
+			padding:5px;
+		}
+
+	</style>
+	{% block header %}{% end %}
+</head>
+	<body>
+		{% block body %}{% end %}
+		{% block footer%}{% end %}
+	</body>
+</html>
