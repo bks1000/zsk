@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-       
+        <link rel="stylesheet" type="text/css" href="{{ static_url("js/easyui/themes/default/easyui.css") }}">
+        <link rel="stylesheet" type="text/css" href="{{ static_url("js/easyui/themes/icon.css") }}">
+        <script type="text/javascript" src="{{ static_url("js/easyui/jquery.min.js") }}"></script>
+        <script type="text/javascript" src="{{ static_url("js/easyui/jquery.easyui.min.js") }}"></script>
+        <script type="text/javascript" src="{{ static_url("js/raty/lib/jquery.raty.js") }}"></script>
+        <script type="text/javascript" src="{{ static_url("js/raty/lib/jquery.raty.css") }}"></script>
+        
     </head>
     <body>
         <input type="hidden" name="coll" id="coll" value="{{coll}}"/>
         <table id="dg" class="easyui-datagrid" style="width:700px;height:250px"
-			data-options="singleSelect:true,fit:true,fitColumns:true,collapsible:false,url:'/{{coll}}/list?id=all',method:'get',toolbar:tb">
+			data-options="singleSelect:true,fit:true,fitColumns:true,striped:true,collapsible:false,url:'/{{coll}}/list?id=all',method:'get',toolbar:tb">
             <thead>
                 <tr>
                     <th data-options="field:'id',width:40,align:'center'">ID</th>
@@ -21,6 +27,7 @@
             <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="updateWin()">修改</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="del()">删除</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="detail()">查看文章</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="pt()">打印</a>
         </div>
         <div id="dd">  
         </div> 
@@ -55,13 +62,14 @@
                  $('#dg').datagrid('reload'); 
              }
              function openWin(){
+                //var ts = (new Date()).valueOf();
                 $('#dd').dialog({    
                     title: '新增',    
-                    width: 800,    
+                    width: 1000,    
                     height: 600,    
                     closed: false,    
                     cache: false,    
-                    href: '/{{coll}}/list?act=add',    
+                    href: '/{{coll}}/list?act=add',  
                     modal: true,
                     onClose:function(){
                         $('#dg').datagrid('reload'); 
@@ -78,26 +86,34 @@
             function updateWin(){
                 var row = getSelectRow();
                 if(row != null){
+                    //var ts = (new Date()).valueOf();
+                    var href= '/{{coll}}/list?act=edit&id='+row.id;
                     $('#dd').dialog({    
                         title: '修改',    
-                        width: 800,    
+                        width: 1000,    
                         height: 600,    
                         closed: false,    
                         cache: false,    
-                        href: '/{{coll}}/list?act=edit&id='+row.id,    
+                        href: href,    
                         modal: true,
                         onClose:function(){
                             $('#dg').datagrid('reload'); 
                         }
                     });
-                    $('#dd').dialog('open').dialog('refresh', href);//调用refresh刷新缓存，或者在href中添加变量。
+                    //$('#dd').dialog('open').dialog('refresh', href);//调用refresh刷新缓存，或者在href中添加变量。
                 }
             }
             function detail(){
                 var row = getSelectRow();
                 if(row !=null){
-                    parent.OP.addPanel('/{{coll}}/details/'+row.id,row.title)
+                    parent.OP.addPanel('/{{coll}}/details/'+row.id,row.title);
                 } 
+            }
+            function pt(){
+                 var row = getSelectRow();
+                if(row != null){
+                    parent.OP.CmdSave('{{coll}}',row.id,row.title);
+                }
             }
             function del(){
                 var row = getSelectRow();

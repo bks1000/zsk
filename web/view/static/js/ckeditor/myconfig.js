@@ -37,7 +37,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
-	config.height = 300;
+	config.height = 360;
 
 	// 上传图片路径
     config.filebrowserImageUploadUrl = "/file";

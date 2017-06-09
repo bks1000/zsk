@@ -22,4 +22,5 @@ url=[(r'/zsk', ZskHandler),(r'/login', LoginHandler),(r'/reg',RegHandler),
 (r"/(?P<coll>.*)/list", CommonListHandler),
 (r"/(?P<coll>.*)/details/(?P<postid>.*)", CommonDetailHandler),
 (r'/menuop',MenuOPHandler),
-(r'/file', FileHandler)]
+(r'/file', FileHandler),
+(r'/favicon.ico',FileHandler)]

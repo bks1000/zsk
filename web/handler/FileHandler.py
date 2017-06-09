@@ -1,7 +1,7 @@
 # coding:utf8
 
 from BaseHandler import BaseHandler
-
+import time
 import os
 
 '''
@@ -43,7 +43,7 @@ class FileHandler(BaseHandler):
         file_metas=self.request.files['upload']
         callback = self.get_argument("CKEditorFuncNum"); 
         for meta in file_metas:
-            filename=meta['filename']
+            filename = str(int(time.time()))+meta['filename'] #添加时间戳，防止重名
             filepath=os.path.join(upload_path,filename)
             #有些文件需要已二进制的形式存储，实际中可以更改
             with open(filepath,'wb') as up:      

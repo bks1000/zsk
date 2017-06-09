@@ -10,7 +10,7 @@
                 text-align: center;
                 font-size: 16px;
             }
-            p{
+            p,pre{
                 font-size: 14px;
                 line-height: 36px;
                 text-indent: 35px;
@@ -23,12 +23,26 @@
                 width: 100px;
                 height: 36px;
             }
+
+            pre code{
+                font-family: 'Source Code Pro',Consolas,Menlo,Monaco,'Courier New',monospace;
+                font-size: inherit;
+                color: inherit;
+                white-space: inherit;
+                background-color: #E0E0E0;
+            }
         </style>
         <input id="exp" name="exp" class="exp" type="button" value="打印" onclick="OP.CmdSave('{{coll}}','{{id}}','{{title}}')"/>
         <div id="divArtical">
             <p class="title">{{title}}</p>
             {{content}}
         </div>
+        <script type="text/javascript">
+            //读取传值，隐藏打印按钮
+            if({{isprint}} == 1){
+                document.getElementById('exp').style.display='none';
+            }
+        </script>
     </body>
 </html>
 
