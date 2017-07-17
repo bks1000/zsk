@@ -1,8 +1,8 @@
 
 <!--<script type="text/javascript" src="{{ static_url("js/easyui/jquery.min.js") }}"></script>
 <script type="text/javascript" src="{{ static_url("js/bootstrap/css/bootstrap.min.css") }}"></script>
-<script type="text/javascript" src="{{ static_url("js/bootstrap/js/bootstrap.min.js") }}"></script>-->
-<script type="text/javascript" src="{{ static_url("js/ckeditor/ckeditor.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("js/bootstrap/js/bootstrap.min.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("js/ckeditor/ckeditor.js") }}"></script>-->
 <form>
     <input id="coll" name="coll" value="{{coll}}" type="hidden"/>
     <input id="_id" name="_id" value="{{_id}}" type="hidden"/>
@@ -27,6 +27,7 @@
 </form>
 <script type="text/javascript">
     CKEDITOR.config.unselectable=true;
+    var editor=null;
     $(document).ready(function(){
         $('#divstars').raty({
             //设置星星个数
@@ -46,7 +47,7 @@
         });
 
         //编辑器
-        CKEDITOR.replace('editor1',{
+        editor = CKEDITOR.replace('editor1',{
              customConfig: '{{ static_url("js/ckeditor/myconfig.js") }}'
          } );
 
@@ -54,19 +55,25 @@
             save();   
         });  
 
-        //修改，填充数据
-        if('{{_id}}'!=''){
-            //查询数据并填充
-            $.get('/{{coll}}/list',{'id':'{{_id}}'},function(data){
-                //console.log(data);
-                data = eval('('+ data +')');
-                //console.log(data);
-                $("#title").textbox('setValue',data.title);
-                $("#stars").val(data.stars);
-                $('#divstars').raty('score', data.stars);
-                CKEDITOR.instances.editor1.setData(data.content);
-            });
-        }
+        setTimeout(function(){
+            //修改，填充数据
+            if('{{_id}}'!=''){
+                //查询数据并填充
+                var tsp = new Date().getTime();
+                $.get('/{{coll}}/list',{'id':'{{_id}}','tsp':tsp},function(data){
+                    //console.log(data);
+                    data = eval('('+ data +')');
+                    //console.log(data);
+                    $("#title").textbox('setValue',data.title);
+                    $("#stars").val(data.stars);
+                    $('#divstars').raty('score', data.stars);
+
+                    editor.setData(data.content);
+                    //CKEDITOR.instances.editor1.setData(data.content);
+                });
+            }
+        },100);
+        
     });
     
     function save(){
@@ -79,7 +86,8 @@
         param.content = data;
         $.post('/{{coll}}/list',param,function(data){
             $.messager.alert('提示',data);
-            parent.$('#dd').dialog('close');
+            //parent.$('#dd').dialog('close');
+            p_close();
         });
     }
 </script>

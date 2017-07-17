@@ -7,6 +7,7 @@
         <script type="text/javascript" src="{{ static_url("js/easyui/jquery.easyui.min.js") }}"></script>
         <script type="text/javascript" src="{{ static_url("js/raty/lib/jquery.raty.js") }}"></script>
         <script type="text/javascript" src="{{ static_url("js/raty/lib/jquery.raty.css") }}"></script>
+        <script type="text/javascript" src="{{ static_url("js/ckeditor/ckeditor.js") }}"></script>
         
     </head>
     <body>
@@ -44,7 +45,7 @@
                                 return 10;
                             },
                             path: function() {
-                                return "{{ static_url("") }}";
+                                return "{{ static_url("js/raty/lib/images/") }}";
                             },
                             //为星星设置查询结果个数
                             score: function() {
@@ -55,6 +56,11 @@
                                 }
                             }
                         });
+                    },
+                    onDblClickRow:function(rowIndex, rowData){
+                        //alert(rowIndex);
+                        //console.log(rowData);
+                        updateWin();
                     }
                 });
              });
@@ -66,7 +72,7 @@
                 $('#dd').dialog({    
                     title: '新增',    
                     width: 1000,    
-                    height: 600,    
+                    height: 500,    
                     closed: false,    
                     cache: false,    
                     href: '/{{coll}}/list?act=add',  
@@ -86,22 +92,28 @@
             function updateWin(){
                 var row = getSelectRow();
                 if(row != null){
-                    //var ts = (new Date()).valueOf();
-                    var href= '/{{coll}}/list?act=edit&id='+row.id;
+                    var tsp = new Date().getTime();
+                    var href= '/{{coll}}/list?act=edit&tsp='+tsp+'&id='+row.id;
                     $('#dd').dialog({    
                         title: '修改',    
                         width: 1000,    
-                        height: 600,    
+                        height: 500,    
                         closed: false,    
                         cache: false,    
                         href: href,    
                         modal: true,
                         onClose:function(){
+                            //console.log('close!!!');
                             $('#dg').datagrid('reload'); 
+                            editor.removeAllListeners();//由于这些都在一个页面中，关闭之后，清理ckeditor对象。
+                            CKEDITOR.remove(editor);
                         }
                     });
-                    //$('#dd').dialog('open').dialog('refresh', href);//调用refresh刷新缓存，或者在href中添加变量。
+                   // $('#dd').dialog('open').dialog('refresh');//调用refresh刷新缓存，或者在href中添加变量。
                 }
+            }
+            function p_close(dispose){
+                $('#dd').dialog('close',dispose());
             }
             function detail(){
                 var row = getSelectRow();
