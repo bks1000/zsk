@@ -1,15 +1,15 @@
 # coding:utf8
 import pymongo
-import sys
-sys.path.append('../')
-from web.dbhelper.dbmongo import DbMongoClient
+#import sys
+#sys.path.append('../')
+#from web.dbhelper.dbmongo import DbMongoClient
 #from web.dbhelper.dbmongo import DbMongoClient
 from BaseHandler import BaseHandler
 
 from bson import json_util as jsonb
 from bson import ObjectId
 
-from web.common.dbconfig import ip, port, database
+from common.dbconfig import ip, port, database
 
 # http://localhost:8000/zsk
 # 使用EASYUI访问

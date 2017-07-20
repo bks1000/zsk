@@ -5,18 +5,24 @@ import tornado.options
 import tornado.web
 import tornado.autoreload
 
-import os
+import os,sys
 
 from tornado.escape import json_decode,json_encode
 from tornado.options import define, options
+
+#添加路径
+sys.path.append(os.getcwd())
+sys.path.append(os.getcwd()+"\\common")
+sys.path.append(os.getcwd()+"\\dbhelper")
+#for p in sys.path:
+#    print p,'\r\n'
 
 import t_url as route_url
 
 define('port', default=8000, help='run on the given port', type=int)
 
-
-
 if __name__ == '__main__':
+
     #tornado.options.parse_command_line()
 
     #template_path参数告诉Tornado在哪里寻找模板文件

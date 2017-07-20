@@ -1,7 +1,7 @@
 # coding:utf8
 
 from BaseHandler import BaseHandler
-from web.common.jsonhelper import *
+from common.jsonhelper import *
 from bson import ObjectId
 
 class CommonListHandler(BaseHandler):

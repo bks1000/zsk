@@ -1,8 +1,8 @@
 # coding:utf8
 
 from BaseHandler import BaseHandler
-from web.common.jsonhelper import *
-from web.common.authenticated import authenticated
+from common.jsonhelper import *
+from common.authenticated import authenticated
 
 
 class IndexHandler(BaseHandler):

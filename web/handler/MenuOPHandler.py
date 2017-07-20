@@ -2,11 +2,11 @@
 
 from BaseHandler import BaseHandler
 
-import sys
-sys.path.append('../')
-from web.dbhelper.dbmongo import DbMongoClient
-from web.common.dbconfig import ip, port, database
-from web.common.jsonhelper import *
+#import sys
+#sys.path.append('../')
+from dbhelper.dbmongo import DbMongoClient
+from common.dbconfig import ip, port, database
+from common.jsonhelper import *
 from bson import ObjectId
 
 class MenuOPHandler(BaseHandler):

@@ -3,10 +3,10 @@
 from BaseHandler import BaseHandler
 import sys
 sys.path.append('../')
-from web.dbhelper.dbmongo import DbMongoClient
-from web.common.dbconfig import ip, port, database
+from dbhelper.dbmongo import DbMongoClient
+from common.dbconfig import ip, port, database
 
-from web.common.jsonhelper import *
+from common.jsonhelper import *
 
 class RegHandler(BaseHandler):
     def __init__(self, *args, **kwargs):

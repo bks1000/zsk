@@ -2,10 +2,10 @@
 
 from tornado.web import RequestHandler
 
-import sys
-sys.path.append('../')
-from web.dbhelper.dbmongo import DbMongoClient
-from web.common.dbconfig import ip, port, database
+#import sys
+#sys.path.append('../')
+from dbhelper.dbmongo import DbMongoClient
+from common.dbconfig import ip, port, database
 
 #解决js跨域请求问题
 class BaseHandler(RequestHandler):

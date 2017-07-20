@@ -51,8 +51,10 @@
              customConfig: '{{ static_url("js/ckeditor/myconfig.js") }}'
          } );
 
-        $('#btnsave').bind('click', function(){    
-            save();   
+        $('#btnsave').bind('click', function(){
+            $('#btnsave').linkbutton('disable');   
+            save();
+            $('#btnsave').linkbutton('enable');
         });  
 
         setTimeout(function(){

@@ -5,7 +5,7 @@
 
 from BaseHandler import BaseHandler
 
-from web.common.jsonhelper import *
+from common.jsonhelper import *
 
 class MenuHandler(BaseHandler):
     """def __init__(self, *args, **kwargs):

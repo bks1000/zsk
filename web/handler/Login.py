@@ -5,7 +5,7 @@ from BaseHandler import BaseHandler
 import sys
 sys.path.append('../')
 
-from web.common.jsonhelper import *
+from common.jsonhelper import *
 
 class LoginHandler(BaseHandler):
     
