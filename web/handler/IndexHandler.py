@@ -1,5 +1,6 @@
 # coding:utf8
 
+from common import viewconfig
 from BaseHandler import BaseHandler
 from common.jsonhelper import *
 from common.authenticated import authenticated
@@ -7,9 +8,9 @@ from common.authenticated import authenticated
 
 class IndexHandler(BaseHandler):
 
-    @authenticated
+    #@authenticated
     def get(self):
-        self.render("index.html",page_title='主页', header_text='主页');
+        self.render("index%s.html" % (viewconfig.version),page_title='主页', header_text='主页');
 
     def post(self):
         """
@@ -23,7 +24,7 @@ class IndexHandler(BaseHandler):
             exist = self.db.find('user',{"$or":[{'username':uname}, {'email':uname}],"$and":[{'pwd':pwd}]}).count()
             if exist >0:
                 print 'login success'
-                self.render("index.html", page_title='主页', header_text='主页')
+                self.render("index%s.html" % (viewconfig.version), page_title='主页', header_text='主页')
             else:
                 msg = {'code':-1,"msg":'用户名或密码不正确！'}
                 self.write(dump(msg))

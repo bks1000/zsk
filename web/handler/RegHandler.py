@@ -15,7 +15,7 @@ class RegHandler(BaseHandler):
     注册业务处理
     """
     def get(self):
-        return self.render('login.html', page_title='注册', header_text='注册')
+        return self.render('login%s.html' % (viewconfig.version), page_title='注册', header_text='注册')
 
     def post(self):
         uname = self.get_argument('username', default='')

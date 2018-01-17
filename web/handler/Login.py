@@ -1,6 +1,7 @@
 # coding:utf8
 
 from BaseHandler import BaseHandler
+from common import viewconfig
 
 import sys
 sys.path.append('../')
@@ -16,9 +17,10 @@ class LoginHandler(BaseHandler):
     登录控制
     """
     def get(self):
-        #self.render('../view/login.html')
-        self.render('login.html', page_title='登录', header_text='登录')
-
+        ##self.render('../view/login.html')
+        #self.render('login.html', page_title='登录', header_text='登录') #easyui前端
+        #self.render('login2.html', page_title='登录', header_text='登录') #vue + element ui 前端
+        self.render('login%s.html' % (viewconfig.version), page_title='登录', header_text='登录')
     def post(self):
         """
         登录
@@ -32,7 +34,7 @@ class LoginHandler(BaseHandler):
             if exist >0:
                 print 'login success'
                 self.set_secure_cookie('user_id',uname) #默认30天的过期时间
-                self.render("index.html", page_title='主页', header_text='主页')
+                self.render("index%s.html" % (viewconfig.version), page_title='主页', header_text='主页')
             else:
                 msg = {'code':-1,"msg":'用户名或密码不正确！'}
                 self.write(dump(msg))

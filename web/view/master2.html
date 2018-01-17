@@ -1,0 +1,32 @@
+{% autoescape None %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	
+	<!-- 引入样式 -->
+    <link rel="stylesheet" href="{{static_url("css/element.css")}}">
+    <!-- 先引入 Vue -->
+    <script src="{{ static_url("js/elementui/vue.js") }}"></script>
+    <!-- 引入组件库 -->
+    <script src="{{ static_url("js/elementui/element.js") }}"></script>
+    <script src="{{ static_url("js/elementui/vue-resource.min.js") }}"></script>
+    <!-- jquery -->
+    <script src="{{ static_url("js/elementui/jquery-3.2.1.min.js") }}"></script>
+    <!--合并单元格 工具-->
+    <script src="{{ static_url("js/elementui/util.js") }}"></script>
+    <style scoped>
+        html,body{
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        
+    </style>
+	{% block header %}{% end %}
+</head>
+	<body>
+		{% block body %}{% end %}
+		{% block footer%}{% end %}
+	</body>
+</html>

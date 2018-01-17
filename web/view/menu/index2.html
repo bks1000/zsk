@@ -1,0 +1,224 @@
+{% extends "../master2.html"%}
+{% block header %}
+{% end %}
+{% block body %}
+
+<div id="app" class="v__addAnimationBg">
+    <el-row>
+        <el-col :span="18">
+            <el-button round type="primary" size="small" icon="el-icon-search" @click="query">查询</el-button>
+            <el-button round type="primary" size="small" icon="el-icon-plus" @click="add" >新建</el-button>
+            <el-button round type="primary" size="small" icon="el-icon-edit" @click="edit">修改</el-button>
+            <el-button round type="primary" size="small" icon="el-icon-delete" @click="del">删除</el-button>
+        </el-col>
+    </el-row>
+    <el-row style="position: absolute;top: 35px;bottom: 30px;width: 100%">
+        <el-col :span="24">
+            <el-table :data="tableData" stripe border style="width: 100%;" v-loading.fullscreen.lock="fullscreenLoading"  highlight-current-row
+                        @row-click="handleCurrentRow" :row-class-name="tableRowClassName" height="570">
+                <el-table-column  type="index" label="序号" width="60" align="center"></el-table-column>
+
+                <el-table-column prop="_id" label="ID"></el-table-column>
+                <el-table-column prop="text" label="菜单名"></el-table-column>
+                
+                <el-table-column prop="attributes.url" label="URL"></el-table-column>
+                
+            </el-table>
+        </el-col>
+    </el-row>
+
+    <!--新建 start-->
+    <el-dialog ref="dlgAdd" size="small" top="5%" title="编辑"  :visible.sync="dialogAddFormVisible"
+               :modal-append-to-body="false" :close-on-click-modal="false" >
+        <el-form :model="formData" :rules="rules" ref="formData">
+            <el-form-item label="菜单名称" prop="name" :label-width="formLabelWidth">
+                <el-input v-model="formData.name" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="上级菜单" prop="pid" :label-width="formLabelWidth">
+                <el-tag>
+                    {{!dynamicTags}}
+                </el-tag>
+                <el-button size="small" @click="selectPid">请选择</el-button>
+            </el-form-item>
+            <el-form-item label="URL" prop="url" :label-width="formLabelWidth">
+                <el-input v-model="formData.url" clearable></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button size="small" @click="resetForm('formData')">取 消</el-button>
+            <el-button type="primary" size="small" @click="save('formData')">确认</el-button>
+        </div>
+    </el-dialog>
+    <!--新建 end-->
+    <!--选择上级菜单-->
+    <el-dialog ref="dlgSelect" size="small" top="5%" title="选择上级菜单"  :visible.sync="dialogAddFormVisible2"
+    :modal-append-to-body="false" :close-on-click-modal="false" label-width="100px">
+        <el-tree
+            ref="tree"
+            :data="treeData"
+            node-key="id"
+            :props="defaultProps">
+        </el-tree>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="small" @click="savePid">确认</el-button>
+        </div>
+    </el-dialog>
+    <!--end-->
+</div>
+{% end %}
+
+{% block footer%}
+
+<script>
+    var debug = true;
+    var vo = new Vue({
+        el:'#app',
+        data:{
+            dynamicTags:'',
+            formLabelWidth:'100px',
+            dialogAddFormVisible:false,
+            dialogAddFormVisible2:false,
+            fullscreenLoading:false,
+            currentNode:{},
+            currentRow:null,
+            tableData:[],
+            formData:{
+                name:'',
+                pid:'',
+                url:'',
+                _id:''
+            },
+            defaultProps:{
+                children: 'children',
+                label: 'text'
+            },
+            treeData:[],
+            rules:{
+                name: [{ required: true, message: '请输入菜单名称'}],
+                url: [{ required: true, message: '请输入URL'}]
+            }
+        },
+        methods:{
+            tableRowClassName:function({row, rowIndex}) {
+                //为停用行添加背景色
+                /*if (row.state == 0) {
+                    return 'warning-row';
+                }*/
+                return '';
+            },
+            handleCurrentRow:function (row) {
+                this.currentRow = row;
+            },
+            query:function(){
+                vo.$http.get('/menuop?data=1').then(function(res){
+                    this.tableData = res.data;
+                });
+            },
+            add:function(){
+                this.dialogAddFormVisible=true;
+            },
+            resetForm:function(form){
+                this.$refs[form].clearValidate();
+                this.$refs[form].resetFields();
+                this.dialogAddFormVisible=false;
+            },
+            selectPid:function(){
+                this.dialogAddFormVisible2=true;
+                vo.$http.get("/menu?moc=1").then(function(res){
+                    vo.treeData = res.data;
+                });
+            },
+            savePid:function(){
+                var node=this.$refs.tree.getCurrentNode();
+                this.formData.pid = node.id;
+                this.dialogAddFormVisible2=false;
+                this.currentNode = node;
+                debug && console.log(this.currentNode);
+                debug && console.log(this.formData);
+                this.dynamicTags = node.text; //设置显示
+            },
+            edit:function(){
+                if( vo.judeCurrentRowIsNull('修改')){
+                    this.dialogAddFormVisible=true;
+                    vo.$http.get('/menuop?act=find&_id='+this.currentRow._id).then(function(res){
+                        if(res.ok){
+                            
+                            this.formData.name=res.data.text;
+                            this.formData.pid=res.data.pid;
+                            this.formData._id=res.data._id;
+                            this.formData.url = res.data.attributes.url;
+                            
+                            //设置显示
+                            //这里没有递归显示，以后再完善吧
+                            vo.$http.get("/menu?moc=1").then(function(res1){
+                                vo.treeData = res1.data;
+                                for(var i=0;i<vo.treeData.length;i++){
+                                    if(vo.treeData[i].id==res.data.pid){
+                                        vo.dynamicTags = vo.treeData[i].text;
+                                        break;
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            },
+            del:function(){
+                if( vo.judeCurrentRowIsNull('删除')){
+                    this.$confirm('此操作将永久删除此菜单, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                        }).then(() => {
+                            vo.$http.post('/menuop?act=del',{"_id":this.currentRow._id,'pid':this.currentRow.pid}).then(function(res){
+                               this.query();
+                            });
+                        });
+                }
+            },
+            save:function(form){
+                vo.$refs[form].validate(function(valid)  {
+                    if (valid) {
+                        //var data = JSON.stringify(vo.formData);
+                        //tornado只实现了post格式为formdata以及urlencode两种方式的post数据的自动解析。
+                        //针对post json格式数据没有自动解析，需要你自己从body里面拿出来解析
+                        vo.$http.post("/menuop?act=save",vo.formData).then(function(res){
+                            debug && console.log(res);
+                            if(res.ok){
+                                vo.$message({
+                                    message: '保存成功！',
+                                    type: 'success',
+                                    duration:1000,
+                                    // showClose:true,
+                                    onClose:function(){
+                                        vo._data.dialogAddFormVisible = false;
+                                        vo.query();
+                                    }
+                                });
+                            }
+                        });
+                        
+                    }
+                });
+            },
+            judeCurrentRowIsNull:function(msg) {//判断是否选中行
+                if(vo.currentRow==null){
+                    vo.$message({
+                        message: '请选择一条数据进行'+msg+"!",
+                        type: 'warning'
+                    });
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+        },
+        mounted:function () {
+            this.$nextTick(function() {
+                this.query();
+            });
+        }
+    });
+</script>
+
+{% end %}
