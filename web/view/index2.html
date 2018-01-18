@@ -2,7 +2,7 @@
 
 {% block header %}
 
-<style>
+<!--<style>
         body {
             padding: 0;
             margin: 0;
@@ -62,13 +62,34 @@
         .el-submenu__title i{
         	color:#fff;
         }
+    </style>-->
+    <style>
+        .el-main{
+            padding:0px;
+        }
+        .el-tab-pane > iframe {
+            width: 100%;
+            height: 605px;
+            border: 0;
+            overflow-y:hidden;
+        }
+        .el-tabs--border-card > .el-tabs__content {
+            padding: 0;
+        }
+        .el-tab-pane{
+            height: 605px;
+        }
+        .el-aside{
+            width:200px;
+            height: 660px;
+        }
     </style>
 {% end %}
 
 {% block body %}
 
 <div id="app">
-    <el-row style="position: fixed; top: 0px; bottom: 0; width: 100%">
+    <!--<el-row style="position: fixed; top: 0px;bottom: 0; width: 100%">
         <el-col :span="4">
             <el-tree ref="tree" node-key="id" :data="treeData" style="background-color: #b3c0d1;" 
             :props="defaultProps" @node-click="handleNodeClick" accordion></el-tree>
@@ -84,7 +105,24 @@
                 </el-tab-pane>
             </el-tabs>
         </el-col>
-    </el-row>
+    </el-row>-->
+    <el-container>
+        <el-aside width="200px">
+            <el-tree ref="tree" node-key="id" :data="treeData" style="background-color: #b3c0d1;" 
+            :props="defaultProps" @node-click="handleNodeClick" accordion></el-tree>
+        </el-aside>
+        <el-main>
+            <el-tabs type="border-card" v-model="activeName" :active-name="activeTab" @tab-remove="handleTabRemove"
+            closable>
+                <el-tab-pane v-for="tab in tabs" :key="tab.key" :name="tab.key" :label="tab.text + tab.key"
+                                v-if="tab.open">
+                    <span slot="label" v-on:mousedown="handleTabClick($event,tab.key)"><i
+                            class="el-icon-document"></i><span>{{!tab.key}}</span></span>
+                    <iframe  scrolling="no" :src="tab.uri"></iframe>
+                </el-tab-pane>
+            </el-tabs>
+        </el-main>
+    </el-container>
 </div>
 
 {% end %}

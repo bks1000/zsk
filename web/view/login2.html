@@ -41,10 +41,10 @@
                 <h3>登录</h3>
                 <el-form id="frm" :model="formData" ref="formData" :rules="rules" label-width="100px" method="post" action='/index'>
                     <el-form-item label="登录名" prop="username">
-                        <el-input v-model="formData.username"></el-input>
+                        <el-input name="username" v-model="formData.username"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="pwd">
-                        <el-input type="password" v-model="formData.pwd"></el-input>
+                        <el-input name="pwd" type="password" v-model="formData.pwd"></el-input>
                     </el-form-item>
                     <el-button @click="resetForm">重置</el-button>
                     <el-button type="primary" @click="submitForm('formData')" >提交</el-button>

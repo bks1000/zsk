@@ -18,7 +18,10 @@ class FileHandler(BaseHandler):
         if filename == '':
             self.write('')
             return
-        filename = os.path.join(os.path.abspath('view/static/upload'),filename)
+        
+        #filename = os.path.join(os.path.abspath('/view/static/upload'),filename)
+        filepath = os.getcwd();
+        filename = filepath + '\\view\\static\\upload\\' + filename
 
         #self.set_header ('Content-Type', '*/*')
         #self.set_header ('Content-Disposition', 'attachment; filename=' + filename)

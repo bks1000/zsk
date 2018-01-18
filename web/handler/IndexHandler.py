@@ -8,7 +8,7 @@ from common.authenticated import authenticated
 
 class IndexHandler(BaseHandler):
 
-    #@authenticated
+    @authenticated
     def get(self):
         self.render("index%s.html" % (viewconfig.version),page_title='主页', header_text='主页');
 
