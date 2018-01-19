@@ -11,6 +11,7 @@ from handler.ArticleHandler import ArticleHandler
 from handler.CommonListHandler import CommonListHandler
 from handler.CommonDetailHandler import CommonDetailHandler
 from handler.FileHandler import FileHandler
+from handler.FileHandler2 import FileHandler2
 
 """
 路由配置
@@ -23,4 +24,5 @@ url=[(r'/zsk', ZskHandler),(r'/login', LoginHandler),(r'/reg',RegHandler),
 (r"/(?P<coll>.*)/details/(?P<postid>.*)", CommonDetailHandler),
 (r'/menuop',MenuOPHandler),
 (r'/file', FileHandler),
+(r'/file2', FileHandler2),
 (r'/favicon.ico',FileHandler)]

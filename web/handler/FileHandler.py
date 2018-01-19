@@ -5,6 +5,7 @@ import time
 import os
 
 '''
+ckeditor
 文件上传下载处理类
 '''
 
@@ -41,7 +42,10 @@ class FileHandler(BaseHandler):
         文件上传
         '''
         #文件的暂存路径
-        upload_path=os.path.join(os.path.abspath('view/static/upload')) 
+        filepath = os.getcwd();
+        upload_path = filepath + '\\view\\static\\upload\\'
+        #upload_path=os.path.join(os.path.abspath('view/static/upload')) 
+        
         #提取表单中‘name’为‘upload’的文件元数据
         file_metas=self.request.files['upload']
         callback = self.get_argument("CKEditorFuncNum"); 
