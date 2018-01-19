@@ -15,37 +15,47 @@ ueditor(通过参考php版的ueditor而来)
 class FileHandler2(BaseHandler):
 
     def get(self):
+        """
+        action=config表示获取ueditor的配置信息，在ueditor初始化时，自动请求
+        """
         action=self.get_argument('action','')
         if(action!='' and action=="config"):
-            with open(os.getcwd()+'\\web\\handler\\ueconfig.json') as json_file:
+            #with open(os.getcwd()+'\\web\\handler\\ueconfig.json') as json_file:
+            #说明，命令行启动，不需要加web前缀
+            #     调试启动，需要加web前缀，以后再研究
+            with open(os.getcwd()+'\\handler\\ueconfig.json') as json_file:
                 data = json.load(json_file)
                 #return data
                 self.write(data)
+        elif (action!="" and action=='listimage'):
+            pass
+        else:
+            '''
+            文件下载
+            '''
+            filename = self.get_argument('filename', default='')
+            if filename == '':
+                self.write('')
+                return
             
-        '''
-        文件下载
-        '''
-        filename = self.get_argument('filename', default='')
-        if filename == '':
-            self.write('')
-            return
-        
-        #filename = os.path.join(os.path.abspath('/view/static/upload'),filename)
-        filepath = os.getcwd();
-        filename = filepath + '\\web\\view\\static\\upload\\' + filename
+            #说明，命令行启动，不需要加web前缀
+            #     调试启动，需要加web前缀，以后再研究
+            filepath = os.getcwd();
+            #filename = filepath + '\\web\\view\\static\\upload\\' + filename
+            filename = filepath + '\\view\\static\\upload\\' + filename
 
-        #self.set_header ('Content-Type', '*/*')
-        #self.set_header ('Content-Disposition', 'attachment; filename=' + filename)
+            #self.set_header ('Content-Type', '*/*')
+            #self.set_header ('Content-Disposition', 'attachment; filename=' + filename)
 
-        #读取的模式需要根据实际情况进行修改
-        with open(filename, 'rb') as f:
-            while True:
-                data = f.read(1024)
-                if not data:
-                    break
-                self.write(data)
-        #记得有finish哦
-        self.finish()
+            #读取的模式需要根据实际情况进行修改
+            with open(filename, 'rb') as f:
+                while True:
+                    data = f.read(1024)
+                    if not data:
+                        break
+                    self.write(data)
+            #记得有finish哦
+            self.finish()
 
     def post(self):
         '''
@@ -53,7 +63,10 @@ class FileHandler2(BaseHandler):
         '''
         #文件的暂存路径
         filepath = os.getcwd();
-        upload_path = filepath + '\\web\\view\\static\\upload\\'
+        #说明，命令行启动，不需要加web前缀
+        #     调试启动，需要加web前缀，以后再研究
+        #upload_path = filepath + '\\web\\view\\static\\upload\\'
+        upload_path = filepath + '\\view\\static\\upload\\'
         #upload_path=os.path.join(os.path.abspath('view/static/upload')) 
         
         #提取表单中‘name’为‘upfile’的文件元数据
