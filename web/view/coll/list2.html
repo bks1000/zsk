@@ -1,4 +1,4 @@
-{% extends "../master2.html" %}
+﻿{% extends "../master2.html" %}
 
 {% block header %}
 
@@ -128,9 +128,17 @@
                     initialFrameHeight:280,
                     initialFrameWidth:document.body.clientWidth-300,
                     elementPathEnabled:false,
-                    toolbars: [['source','|',
-                                'bold','italic','underline','removeformat','|','forecolor','backcolor',
-                                'fontfamily','fontsize','|','justifyleft','justifycenter','justifyright','justifyjustify','simpleupload','insertimage','fullscreen']],
+                    toolbars: [['fullscreen', 'source', '|', 'undo', 'redo', '|',
+                    'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                    'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+                    'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+                    'directionalityltr', 'directionalityrtl', 'indent', '|',
+                    'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+                    'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                    'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'gmap', 'insertframe', 'insertcode', 'webapp', 'pagebreak', 'template', 'background', '|',
+                    'horizontal', 'date', 'time', 'spechars', 'snapscreen', 'wordimage', '|',
+                    'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+                    'print', 'preview', 'searchreplace', 'drafts', 'help']],
                     maximumWords:5000000
                 });
             },
@@ -155,6 +163,10 @@
             },
             add:function(){
                 this.dialogAddFormVisible=true;
+		this.form.id="";
+		this.form._id="";
+		this.form.title="";
+		this.form.stars=0;
                 //渲染ueditor
     			setTimeout(function () { if( vo.ue.key!="content"){vo.ue.render("content");}}, 10);
     			vo.ue.ready(function() {//编辑器初始化完成再赋值  
