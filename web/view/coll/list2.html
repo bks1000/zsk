@@ -19,6 +19,7 @@
     .el-form-item {
          margin-bottom: 0px; 
     }
+
 </style>
 <!--<script type="text/javascript" src="{{ static_url("js/ckeditor/ckeditor.js") }}"></script>-->
 <script src="{{ static_url("js/ueditor/ueditor.config.js")}}" type="text/javascript"></script>
@@ -64,7 +65,7 @@
         </el-col>
     </el-row>
     <!--新建 start-->
-    <el-dialog ref="dlgAdd" size="small" top="1%" width="80%" :title="title"  :visible.sync="dialogAddFormVisible"
+    <el-dialog ref="dlgAdd" size="small" top="1%" width="90%" :title="title"  :visible.sync="dialogAddFormVisible"
     :modal-append-to-body="false" :close-on-click-modal="false">
         <el-form :model="form" :rules="rules" ref="form" >
             <el-form-item label="标题" :label-width="formLabelWidth" prop="title">
@@ -77,10 +78,10 @@
 
             <!-- 编辑器 -->
             <div id='ueditor' style="width:100%;height:100%;" >
-                <table  id='layout0'  cellSpacing=0 cellPadding=0 class= 'kitui-layout-table' >
+                <table  id='layout0'  cellSpacing=0 cellPadding=0 style="width:100%;height:100%;">
                     <tr style='vertical-align:top' >
                         <td>
-                            <textarea id="content" name="content"  ></textarea>
+                            <textarea id="content" name="content" style="width:100%;height:100%;"></textarea>
                         </td>
                     </tr>	
                 </table>
@@ -125,8 +126,8 @@
         methods:{
             ueditorLoad: function(){
                 vo.ue = new UE.ui.Editor({
-                    initialFrameHeight:280,
-                    initialFrameWidth:document.body.clientWidth-300,
+                    initialFrameHeight:380,
+                    initialFrameWidth:document.body.clientWidth-180,
                     elementPathEnabled:false,
                     toolbars: [['fullscreen', 'source', '|', 'undo', 'redo', '|',
                     'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
