@@ -10,5 +10,7 @@ tornado                 运行  F:\HW\scrapyzsk\csdnzsk\web>python main.py
 jquery                  将webclient部署到IIS，添加a.html为默认文档。修改a.html把请求数据地址改为花生壳地址
 easyui
 easyui-raty(星星插件)
+Vue
+ElementUI
 iis
 花生壳                   添加两个映射，一个是tornado，一个是IIS。          
